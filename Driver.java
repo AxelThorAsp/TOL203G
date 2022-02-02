@@ -14,6 +14,7 @@ public class Driver{
          StdOut.print(q +"\n" );
        }
      }
+     
     StdOut.println(Arrays.toString(uf.getId()));
    }
  }
