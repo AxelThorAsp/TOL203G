@@ -12,6 +12,7 @@ public class QuickFindUF{
   public int[] getId(){
     return id;
   }
+
   public int find(int p){
     return id[p];
   }

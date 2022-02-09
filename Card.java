@@ -40,9 +40,8 @@ public class Card implements Comparable <Card>{
   public static void main(String[] args) {
     //test
     Card c1 = new Card(2,2);
-    c1.rank=1;
-    c1.suit=1;
     Card c2 = new Card(1,1);
-    StdOut.println("compareTo: "+c1.compareTo(c2));
+
+    StdOut.println(c1 < c2);
   }
 }
