@@ -1,14 +1,21 @@
 import edu.princeton.cs.algs4.*;
 
+
 public class LLMerge {
   public static LLNode merge(LLNode a, LLNode b) {
+    print(a);
+    print(b);
+
     LLNode ret = new LLNode();
     LLNode last = ret;
+    if (a == null && b == null) {
+        return null;
+    }
 
-    if (a==null) {
+    if (a == null) {
       return b;
     }
-    else if(b==null) {
+    if(b == null) {
       return a;
     }
 
@@ -18,14 +25,23 @@ public class LLMerge {
       last.next=a;
       last = last.next; // hoppum afram
       a = a.next; // hoppum afram i a listanum
-      last.next=null;
-    }
-    else {
-      b = b.next;
 
     }
+    else {
+      last.next=b;
+      last = last.next;
+      b = b.next;
+    }
   }
-    return ret;
+    if (b==null && a!= null) {
+      last.next = a;
+    } else if (a==null && b!=null) {
+      last.next=b;
+    } else {
+      last.next = null;
+    }
+
+    return ret.next;
   }
   public static void print(LLNode a) {
     while (a!=null) {
@@ -39,20 +55,14 @@ public class LLMerge {
     LLNode n1 = new LLNode();
     LLNode n2 = new LLNode();
     LLNode n3 = new LLNode();
-    LLNode sus = new LLNode();
-    //A -> C -> null
+    //"" -> C -> null
     //B -> null
-    n1.item ="A";
+    n1.item ="";
     n2.item ="C";
     n3.item ="B";
     n1.next = n2;
 
-    sus=n1;
-    sus=sus.next;
-    sus.next=null;
-
-    print(sus);
-    // er ret A-B-C
-
+    // er ret ""-B-C
+    print(merge(n1,n3));
   }
 }
