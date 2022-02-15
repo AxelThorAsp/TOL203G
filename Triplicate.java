@@ -49,9 +49,9 @@ public class Triplicate {
 
   }
   public static void main(String[] args) {
-    String[] a ={"a","c","b"};
-    String[] b ={"b","c","d"};
-    String[] c ={"e","f","b"};
+    String[] a ={"a","b",};
+    String[] b ={"b","d",};
+    String[] c ={"a",};
     StdOut.println(triplicate(a,b,c));
   }
 }
