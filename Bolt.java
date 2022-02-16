@@ -2,7 +2,7 @@ public class Bolt extends NutBolt {
   public Bolt(int v) {
     super(v);
   }
-  
+
   public int compareTo(NutBolt o) {
     try {
       Nut n = (Nut) o;
