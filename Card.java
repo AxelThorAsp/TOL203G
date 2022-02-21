@@ -1,6 +1,6 @@
 import edu.princeton.cs.algs4.*;
 
-public class Card implements Comparable <Card>{
+public class Card extends Comparable <Card>{
   private int suit;
   private int rank;
   Card(int suit, int rank){
@@ -42,6 +42,5 @@ public class Card implements Comparable <Card>{
     Card c1 = new Card(2,2);
     Card c2 = new Card(1,1);
 
-    StdOut.println(c1 < c2);
   }
 }

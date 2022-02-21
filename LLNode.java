@@ -3,6 +3,8 @@ public class LLNode {
   public LLNode next;
 
 
+
+
   public static void main(String[] args) {
     LLNode ret = new LLNode();
     LLNode last = ret;
