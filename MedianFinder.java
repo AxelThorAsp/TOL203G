@@ -1,83 +1,118 @@
 import edu.princeton.cs.algs4.*;
-import util.ArrayUtil;
+import java.util.Arrays;
 
-public class MedianFinder<Key extends Comparable<Key>> {
-  private Key[] maxHeap;
-  private Key[] minHeap;
-  private int N;
+class MaxHeap<Key>  {
+  public Key[] q;     // index starts at 1
+  private int n;       // items in heap
 
-  public MedianFinder() {
-  maxHeap = (Key[]) Comparable[2];
-  minHeap = (Key[]) Comparable[2];
+  public MaxHeap() {
+    q = (Key[]) new Object[2];
   }
 
-  private boolean less(Key[] arr, int i, int j) {
-    return arr[i].compareTo(arr[j])<0;
+  public boolean isEmpty() {
+        return n == 0;
+    }
+
+  public int size() {
+    return this.n;
   }
 
-  private boolean more(Key[] arr, int i, int j) {
-    return arr[i].compareTo(arr[j])>=0;
+  public Key max() {
+
+    return q[1];
   }
 
+  private void resize(int capacity) {
+    assert capacity > n;
+    Key[] temp = (Key[]) new Object[capacity];
+    for (int i = 1; i <= n; i++) {
+      temp[i] = q[i];
+    }
+    q = temp;
+  }
+  public void insert(Key x) {
+    // double size of array if necessary
+    if (n == q.length - 1) resize(2 * q.length);
+    // add x, and percolate it up to maintain heap invariant
+    q[++n] = x;
+    swim(n);
+  }
 
+  public Key delMax() {
+    Key max = q[1];
+    exch(1, n--);
+    sink(1);
+    q[n+1] = null;     // to avoid loitering and help with garbage collection
+    if ((n > 0) && (n == (q.length - 1) / 4)) resize(q.length / 2);
+    return max;
+  }
 
-  private void maxHeapify(Key[] arr) {
-    for (int k = N/2; k>=1; k--) {
-      sink(arr,k)
+  private void swim(int k) {
+    while (k > 1 && less(k/2, k)) {
+    exch(k/2, k);
+    k = k/2;
     }
   }
 
-  public void swimMin(int k) {
-    while (k > 1 && ArrayUtil.more(k/2, k)) {
-      exch(k/2, k);
-      k = k/2;
-    }
-  }
-
-  private void swimMax(int k) {
-    while (k > 1 && ArrayUtil.less(k/2, k)) {
-      exch(k/2, k);
-      k = k/2;
-    }
-  }
-
-  private void exch(Key[] arr,int i, int j) {
-      Key swap = arr[i];
-      arr[i] = arr[j];
-      arr[j] = swap;
-  }
-
-  private void sink(Key[] arr, int k) {
-    while (2*k <= N) {
+  private void sink(int k) {
+    while (2*k <= n) {
       int j = 2*k;
-      if (j < N && less(arr,j, j+1)) j++;
-      if (!less(arr,k, j)) break;
-      exch(arr,k, j);
+      if (j < n && less(j, j+1)) j++;
+      if (!less(k, j)) break;
+      exch(k, j);
       k = j;
     }
   }
 
-
-  public Key findMedian() {
-    return null;
+  private boolean less(int i, int j) {
+    return ((Comparable<Key>) q[i]).compareTo(q[j]) < 0;
   }
 
+  private void exch(int i, int j) {
+    Key swap = q[i];
+    q[i] = q[j];
+    q[j] = swap;
+  }
+
+};
+
+class MinHeap<Key> {
+  public MinHeap(){
+
+  }
+
+}
+
+public class MedianFinder<Key extends Comparable<Key>> {
+  private MaxHeap<Key> maxHp;
+
+  public MedianFinder() {
+     maxHp = new MaxHeap<>();
+  }
+  public Key findMedian() {
+
+    return null;
+  }
   public Key deleteMedian() {
     return null;
   }
-
   public void insert(Key key) {
+    maxHp.insert(key);
   }
 
+  private void printMax() {
+    System.out.println(maxHp.max());
+  }
   public static void main(String[] args) {
-    MedianFinder<String> m = new MedianFinder<String>();
-    m.insert("1");
-    m.insert("2");
-    m.insert("3");
-    m.insert("4");
-    m.insert("5");
-    m.insert("6");
-    StdOut.println(m.findMedian());
+     MedianFinder<String> m = new MedianFinder<String>();
+     m.insert("A");
+     m.insert("B");
+     m.insert("C");
+     m.insert("D");
+     m.printMax();
+    // m.insert("A");
+    // m.insert("A");
+    // StdOut.println(m.findMedian());
 
   }
 }
