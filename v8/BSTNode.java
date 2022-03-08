@@ -4,11 +4,7 @@ public class BSTNode{
 
 
 	public BSTNode(String key){
-		this.key = key;
+		this.key = key; 
 
-	}
-
-	public static String toString(BSTNode x){
-		return x.key;
 	}
 }
