@@ -7,6 +7,7 @@ public class CuckooST<Key, Value> {
   private int m;           // size of the tables
   private Key[][] keys;      // the keys
   private Value[][] vals;    // the values
+  private Random rand = new Random();
 
 
   // taken from MurmurHash3 http://sites.google.com/site/murmurhash/
@@ -91,21 +92,65 @@ public class CuckooST<Key, Value> {
     m    = temp.m;
   }
 
+
+  private int hash(Key key, int index) {
+    long h = murmurhash(key.hashCode(), 42);
+    int h1 = ((int)(h & 0x7fffffff)) % m;
+    int h2 = ((int)((h >> 32) & 0x7fffffff)) % m;
+    int[] hs = {h1, h2};
+    return hs[index];
+  }
+
   public void put(Key key, Value val) {
+    int count = 0;
     if (key == null) throw new IllegalArgumentException("first argument to put() is null");
+    long h = murmurhash(key.hashCode(), 42);
+    int h1 = ((int)(h & 0x7fffffff)) % m;
+    int h2 = ((int)((h >> 32) & 0x7fffffff)) % m;
+    int[] hs = {h1, h2};
 
     if (val == null) {
-      delete(key);
+      //delete(key);
       return;
     }
 
-    if (n > (0.8*m)) {
+    if (n > (0.5*m)) {
       resize(2*m);
     }
 
-    ...
-  }
+    if (keys[0][h1] = null) {
+      keys[0][h1] = key;
+      vals[0][h1] = val;
+      n++;
+    }
+    else {
+      Key inTo = keys[0][h1];
+      while(inTo != null){
+        int h = hash(inTo, count % 2);
+        Key tempKey = keys[count % 2][h];
+        Value tempVal = vals[count % 2][h]];
 
+        keys[count % 2][hash(key, count % 2)] = key;
+        vals[count % 2][hash(key, count % 2)] = val;
+
+        ++count;
+        int H = hash(tempKey, count % 2);
+        inTo = keys[count % 2][H];
+
+        keys[count % 2][H] = tempKey;
+        vals[count % 2][H] = tempVal;
+
+        key = tempKey;
+        val = tempVal;
+
+        if (count >100){
+          //max depth
+          resize(m + 1);
+          put(key, val);
+        }
+      }
+    }
+  }
 
   public Value get(Key key) {
     if (key == null) throw new IllegalArgumentException("argument to get() is null");
@@ -113,7 +158,15 @@ public class CuckooST<Key, Value> {
     int h1 = ((int)(h & 0x7fffffff)) % m;
     int h2 = ((int)((h >> 32) & 0x7fffffff)) % m;
 
-    ...
+    if (keys[0][h1].equals(key)) {
+      return keys[0][h1];
+    }
+    else if (keys[1][h2].equals(key)){
+      return keys[1][h2];
+    }
+    else {
+      System.out.println("ERROR: no such key exists.");
+    }
   }
 
   public Iterable<Key> keys() {
